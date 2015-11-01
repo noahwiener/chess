@@ -1,3 +1,5 @@
+require 'byebug'
+
 module Slideable
   DIRECTIONS = { up: [0, -1],
                  down: [0, 1],
@@ -12,8 +14,8 @@ module Slideable
     possible_moves = []
 
     available_directions.each do |dir|
-      current_pos = @pos
-      new_pos = [@pos[0] + DIRECTIONS[dir][0], @pos[1] + DIRECTIONS[dir][1]]
+      current_pos = @position
+      new_pos = [@position[0] + DIRECTIONS[dir][0], @position[1] + DIRECTIONS[dir][1]]
 
       while @board.valid_move?(current_pos, new_pos)
         possible_moves << new_pos

@@ -2,14 +2,15 @@ require_relative 'display'
 
 class Player
   attr_reader :color, :display
+  attr_accessor :name
 
   def initialize(color, display)
     @color = color
-    @board = board
     @display = display
+    @name = ""
   end
 
-  def make_move(board)
+  def make_move
     from_pos, to_pos = nil, nil
 
     until from_pos && to_pos

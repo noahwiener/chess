@@ -17,25 +17,25 @@ class Pawn < Piece
 
   def determine_moves
     if @color == :b
-      @available_directions << [1, 0] unless @board[[@pos[0] + 1, @pos[1]]].is_a?(Piece)
+      @available_directions << [1, 0] unless @board[[@position[0] + 1, @position[1]]].is_a?(Piece)
     else
-      @available_directions << [-1, 0] unless @board[[@pos[0] - 1, @pos[1]]].is_a?(Piece)
+      @available_directions << [-1, 0] unless @board[[@position[0] - 1, @position[1]]].is_a?(Piece)
     end
 
     if in_original_position?(@color)
       if @color == :b
-        @available_directions << [2, 0] unless @board[[@pos[0] + 1, @pos[1]]].is_a?(Piece)
+        @available_directions << [2, 0] unless @board[[@position[0] + 1, @position[1]]].is_a?(Piece)
       else
-        @available_directions << [-2, 0] unless @board[[@pos[0] - 1, @pos[1]]].is_a?(Piece)
+        @available_directions << [-2, 0] unless @board[[@position[0] - 1, @position[1]]].is_a?(Piece)
       end
     end
     check_diagonals(@color)
   end
 
   def in_original_position?(color)
-    if color == :b && @pos[0] == 1
+    if color == :b && @position[0] == 1
       return true
-    elsif color == :w && @pos[0] == 6
+    elsif color == :w && @position[0] == 6
       return true
     end
     false
@@ -47,15 +47,15 @@ class Pawn < Piece
       possibles = [:downright, :downleft]
 
       possibles.each do |dir|
-        pos = [DIRECTIONS[dir][0] + @pos[0], DIRECTIONS[dir][1] + @pos[1]]
-        @available_directions << DIRECTIONS[dir] if @board.valid_move?(@pos, pos) && @board[pos].color == :white
+        pos = [DIRECTIONS[dir][0] + @position[0], DIRECTIONS[dir][1] + @position[1]]
+        @available_directions << DIRECTIONS[dir] if @board.valid_move?(@position, pos) && @board[pos].color == :white
       end
     elsif color == :w
       possibles = [:upright, :upleft]
 
       possibles.each do |dir|
-        pos = [DIRECTIONS[dir][0] + @pos[0], DIRECTIONS[dir][1] + @pos[1]]
-        @available_directions << DIRECTIONS[dir] if @board.valid_move?(@pos, pos) && @board[pos].color == :black
+        pos = [DIRECTIONS[dir][0] + @position[0], DIRECTIONS[dir][1] + @position[1]]
+        @available_directions << DIRECTIONS[dir] if @board.valid_move?(@position, pos) && @board[pos].color == :black
       end
     end
   end
@@ -65,7 +65,7 @@ class Pawn < Piece
 
     result = []
     @available_directions.each do |change|
-      new_pos = [change[0] + @pos[0], change[1] + @pos[1]]
+      new_pos = [change[0] + @position[0], change[1] + @position[1]]
       result << new_pos
     end
 

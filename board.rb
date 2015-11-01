@@ -13,26 +13,23 @@ class Board
     add_starting_pieces unless duped
   end
 
-  def make_move(color, start, to)
-    raise 'select a piece' if self[start].class = EmptyPiece
-    piece = self[start]
-    if piece.color != turn_color
-      raise 'Please select your own piece'
-    elsif !piece.moves.include?(to)
-      raise 'This piece can\'t move there'
-    elsif !piece.valid_moves.include?(to)
-      raise 'This move would put you in check'
+  def make_move(color)
+    from, to = @display.take_input(color)
+
+    if self[from].valid_moves(color).include?(to)
+      if valid_move?(from, to)
+        make_move!(from, to, color)
+      end
     end
-
-    move(start, to)
+    # promote_pawn
   end
 
-  def move(start, to)
-    piece = self[start]
-    piece.position = to
-    self[to] = piece
-    self[start] = EmptyPiece.new()
+  def make_move!(from, to, color)
+    self[to] = self[from]
+    self[to].position = to
+    self[from] = EmptyPiece.new
   end
+
 
   def in_check?(color)
     opponent = opposite_color(color)
@@ -55,7 +52,7 @@ class Board
     @grid.each_with_index do |row, row_idx|
       row.each_with_index do |square, col_idx|
         if square.class != EmptyPiece && square.color == color
-            all_moves += square.list_moves
+            all_moves += square.possible_moves
         end
       end
     end
@@ -65,23 +62,43 @@ class Board
 
   def checkmate?(color)
     if in_check?(color)
-      find_all_moves(color).each do |move|
-        if valid_moves.include?(move)
-          return false
+      opponent = opposite_color(color)
+      @grid.each do |row|
+        row.each do |square|
+          if square.class != EmptyPiece && square.color == opponent
+              return false if square.valid_moves(opponent).count > 0
+          end
         end
       end
+      return true
     end
-    true
+    false
   end
+
+  def stalemate?(color)
+    unless in_check?(color)
+      opponent = opposite_color(color)
+      @grid.each do |row|
+        row.each do |square|
+          if square.class != EmptyPiece && square.color == opponent
+              return false if square.valid_moves(opponent).count > 0
+          end
+        end
+      end
+      return true
+    end
+    false
+  end
+
 
   def dup
     duped = Board.new(true)
-    duped.grid.each_with_index do |row, idx1|
-      row.each_with_index do |square, idx2|
-        unless square.class == EmptyPiece
-          color = self[idx1, idx2].color
-          type = self[idx1, idx2].class
-          square = type.new(color, [idx1, idx2], duped)
+    grid.each_with_index do |row, row_idx|
+      row.each_with_index do |square, col_idx|
+        if square.class == EmptyPiece
+          duped.grid[row_idx][col_idx] = EmptyPiece.new
+        else
+          duped.grid[row_idx][col_idx] = square.dup_with_board(duped)
         end
       end
     end
@@ -96,6 +113,14 @@ class Board
   def []=(pos, piece)
     row, col = pos
     @grid[row][col] = piece
+  end
+
+  def valid_move?(from, to)
+   if in_bounds?(to) && self[from].opponent?(self[to])
+     true
+   else
+     false
+   end
   end
 
 private
@@ -140,17 +165,8 @@ private
    row_array
  end
 
-
   def in_bounds?(pos)
     pos.first.between?(0,7) && pos.last.between?(0,7)
-  end
-
-  def valid_move?(piece, move)
-    in_bounds?(move) && !same_team?(piece, move)
-  end
-
-  def same_team?(piece, square)
-    self[*square].color == piece.color
   end
 
   def opponent_piece?(piece, square)

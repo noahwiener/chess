@@ -18,6 +18,16 @@ class Piece
     " #{symbol} ".colorize(self.color)
   end
 
+  def opponent?(piece)
+    return false if piece.class == EmptyPiece
+    color != piece.color
+  end
+
+  def dup_with_board(board)
+    self.class.new(@color, @position, board)
+  end
+
+
   def dup(board)
     self.class.new(color, position.dup, board)
   end

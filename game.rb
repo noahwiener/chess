@@ -10,7 +10,7 @@ class Game
     @colors = [:w, :b]
     @board = Board.new
     @display = Display.new(@board)
-    @players = [Player.new(:w, @board), Player.new(:b, @board)]
+    @players = [Player.new(:w, @display), Player.new(:b, @display)]
     player_assignments
     @current = @players.first
     play
@@ -29,9 +29,9 @@ class Game
     puts "#{@players[0].name} is white and goes first"
     puts "#{@players[1].name} is black"
     puts "Have fun!"
-    sleep 2
+    sleep 1
 
-    board.display.render(@current.color)
+    display.render
     take_turn until game_over?
     if checkmate?
       puts "Checkmate! #{@current.name} wins!"
@@ -43,9 +43,9 @@ class Game
   private
 
   def take_turn
-    player_input = @current.get_move
+    player_input = @current.make_move
     board.make_move(player_input)
-    board.display.render(@current.color)
+    display.render
     switch_players!
   end
 

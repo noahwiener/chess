@@ -4,13 +4,13 @@ class Knight < Piece
 
     result = []
     available_directions.each do |change|
-      new_pos = [change[0] + @pos[0], change[1] + @pos[1]]
-      result << new_pos if @board.valid_move?(@pos, new_pos)
+      new_pos = [change[0] + @position[0], change[1] + @position[1]]
+      result << new_pos if @board.valid_move?(@position, new_pos)
     end
     result
   end
 
   def to_s
-    @color == :white ? " ♞ " : " ♞ ".colorize(:black)
+    @color == :w ? " ♞ " : " ♞ ".colorize(:black)
   end
 end

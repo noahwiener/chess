@@ -6,6 +6,6 @@ class Queen < Piece
   end
 
   def to_s
-    @color == :white ? " ♛ " : " ♛ ".colorize(:black)
+    @color == :w ? " ♛ " : " ♛ ".colorize(:black)
   end
 end

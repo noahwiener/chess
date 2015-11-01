@@ -10,12 +10,12 @@ class King < Piece
                  downleft: [-1, 1] }
 
   def possible_moves
-    result = []
-    DIREECTIONS.each do |dir|
-      new_pos = [@pos[0] + DIRECTIONS[dir][0], @pos[1] + DIRECTIONS[dir][1]]
-      result << new_pos if @board.valid_move?(@pos, new_pos)
+    possible_moves = []
+    DIRECTIONS.keys.each do |dir|
+      new_pos = [@position[0] + DIRECTIONS[dir][0], @position[1] + DIRECTIONS[dir][1]]
+      possible_moves << new_pos if @board.valid_move?(@position, new_pos)
     end
-    result
+    possible_moves
   end
 
 
