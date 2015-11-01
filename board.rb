@@ -1,5 +1,5 @@
 require_relative 'display'
-require_relative 'piece'
+require_relative 'pieces'
 require 'byebug'
 
 class Board
@@ -88,6 +88,16 @@ class Board
     duped
   end
 
+  def [](pos)
+    row, col = pos
+    @grid[row][col]
+  end
+
+  def []=(pos, piece)
+    row, col = pos
+    @grid[row][col] = piece
+  end
+
 private
 
   def opposite_color(color)
@@ -128,16 +138,6 @@ private
    row_array[4] = King.new(color, [row, 4], self)
 
    row_array
- end
-
- def [](pos)
-   row, col = pos
-   @grid[row][col]
- end
-
- def []=(pos, piece)
-   row, col = pos
-   @grid[row][col] = piece
  end
 
 

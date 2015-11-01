@@ -1,5 +1,3 @@
-require_relative 'piece'
-
 class King < Piece
 
   DIRECTIONS = { up: [0, -1],
@@ -12,13 +10,12 @@ class King < Piece
                  downleft: [-1, 1] }
 
   def possible_moves
-      result = []
-      DIREECTIONS.each do |dir|
-        new_pos = [@pos[0] + DIRECTIONS[dir][0], @pos[1] + DIRECTIONS[dir][1]]
-        result << new_pos if @board.valid_move?(@pos, new_pos)
-      end
-      result
+    result = []
+    DIREECTIONS.each do |dir|
+      new_pos = [@pos[0] + DIRECTIONS[dir][0], @pos[1] + DIRECTIONS[dir][1]]
+      result << new_pos if @board.valid_move?(@pos, new_pos)
     end
+    result
   end
 
 

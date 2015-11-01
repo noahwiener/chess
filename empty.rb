@@ -1,6 +1,4 @@
-require_relative 'piece'
-
-class EmptyPiece < Piece
+class EmptyPiece
 
   def to_s
     "   "

@@ -1,5 +1,3 @@
-require_relative 'piece'
-
 class Knight < Piece
   def possible_moves
     available_directions = [[2, -1], [2, 1], [-2, -1], [-2, 1], [1, -2], [1, 2], [-1, -2], [-1, 2]]
