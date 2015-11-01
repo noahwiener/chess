@@ -1,10 +1,16 @@
 require_relative 'board'
+require_relative 'player'
+require 'byebug'
 
 class Game
-  def initialize(white, black)
+
+  attr_reader :board, :display, :players, :current
+
+  def initialize
     @colors = [:w, :b]
     @board = Board.new
-    @players = [white,black]
+    @display = Display.new(@board)
+    @players = [Player.new(:w, @board), Player.new(:b, @board)]
     player_assignments
     @current = @players.first
     play
@@ -13,11 +19,9 @@ class Game
   def player_assignments
     puts "Player one will play as white.  Enter player one's name"
     @players[0].name = gets.chomp
-    @players[0].color = :w
 
     puts "Player two will play as black. Enter player two's name"
     @players[1].name = gets.chomp
-    @players[1].color = :b
   end
 
   def play
@@ -27,7 +31,7 @@ class Game
     puts "Have fun!"
     sleep 2
 
-    @board.display.render(@current.color)
+    board.display.render(@current.color)
     take_turn until game_over?
     if checkmate?
       puts "Checkmate! #{@current.name} wins!"
@@ -36,10 +40,12 @@ class Game
     end
   end
 
+  private
+
   def take_turn
     player_input = @current.get_move
-    @board.make_move(player_input)
-    @board.display.render(@current.color)
+    board.make_move(player_input)
+    board.display.render(@current.color)
     switch_players!
   end
 
@@ -49,14 +55,14 @@ class Game
   end
 
   def game_over?
-    @colors.any? { |color| @board.checkmate?(color) || @board.stalemate?(color)}
+    @colors.any? { |color| board.checkmate?(color) || board.stalemate?(color)}
   end
 
   def checkmate?
-    @colors.any? { |color| @board.checkmate?(color) }
+    @colors.any? { |color| board.checkmate?(color) }
   end
 end
 
 if __FILE__ == $PROGRAM_NAME
-  Game.new(Player.new, Player.new)
+  Game.new
 end

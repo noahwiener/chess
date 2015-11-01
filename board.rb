@@ -1,20 +1,104 @@
-require 'colorize'
+require_relative 'display'
 require_relative 'piece'
 require 'byebug'
 
 class Board
-  attr_accessor :grid
-  attr_accessor :selected
-  attr_reader :current_player_color
+  include Cursorable
 
-  def initialize
+  attr_accessor :grid, :display
+
+  def initialize(duped = false)
     @empty_piece = EmptyPiece.new
     @grid = Array.new(8) { Array.new(8, @empty_piece) }
-    @current_player_color = :w
-    add_pieces
+    add_starting_pieces unless duped
   end
 
-  def add_pieces
+  def make_move(color, start, to)
+    raise 'select a piece' if self[start].class = EmptyPiece
+    piece = self[start]
+    if piece.color != turn_color
+      raise 'Please select your own piece'
+    elsif !piece.moves.include?(to)
+      raise 'This piece can\'t move there'
+    elsif !piece.valid_moves.include?(to)
+      raise 'This move would put you in check'
+    end
+
+    move(start, to)
+  end
+
+  def move(start, to)
+    piece = self[start]
+    piece.position = to
+    self[to] = piece
+    self[start] = EmptyPiece.new()
+  end
+
+  def in_check?(color)
+    opponent = opposite_color(color)
+    king_pos = find_king(color)
+    find_all_moves(opponent).include?(king_pos)
+  end
+
+  def find_king(color)
+    @grid.each_with_index do |row, row_idx|
+      row.each_with_index do |square, col_idx|
+        if square.class == King && square.color == color
+          return [row_idx, col_idx]
+        end
+      end
+    end
+  end
+
+  def find_all_moves(color)
+    all_moves = []
+    @grid.each_with_index do |row, row_idx|
+      row.each_with_index do |square, col_idx|
+        if square.class != EmptyPiece && square.color == color
+            all_moves += square.list_moves
+        end
+      end
+    end
+    all_moves.uniq
+  end
+
+
+  def checkmate?(color)
+    if in_check?(color)
+      find_all_moves(color).each do |move|
+        if valid_moves.include?(move)
+          return false
+        end
+      end
+    end
+    true
+  end
+
+  def dup
+    duped = Board.new(true)
+    duped.grid.each_with_index do |row, idx1|
+      row.each_with_index do |square, idx2|
+        unless square.class == EmptyPiece
+          color = self[idx1, idx2].color
+          type = self[idx1, idx2].class
+          square = type.new(color, [idx1, idx2], duped)
+        end
+      end
+    end
+    duped
+  end
+
+private
+
+  def opposite_color(color)
+    if color == :w
+      :b
+    else
+      :w
+    end
+  end
+
+  def add_starting_pieces
    @grid[0] = main_row(:b, 0)
    @grid[1] = pawn_row(:b, 1)
    @grid[6] = pawn_row(:w, 6)
@@ -57,13 +141,6 @@ class Board
  end
 
 
- def move(start, to)
-   piece = self[start]
-   piece.position = to
-   self[to] = piece
-   self[start] = EmptyPiece.new()
- end
-
   def in_bounds?(pos)
     pos.first.between?(0,7) && pos.last.between?(0,7)
   end
@@ -80,61 +157,4 @@ class Board
     self[*square].class != EmptyPiece && self[*square].color != piece.color
   end
 
-  def in_check?(color)
-    if color == :w
-      king_pos = find_king(:w)
-      find_all_moves(:b).include?(king_pos)
-    else
-      king_pos = find_king(:b)
-      find_all_moves(:w).include?(king_pos)
-    end
-  end
-
-  def find_king(color)
-    @grid.each_with_index do |row, row_idx|
-      row.each_with_index do |square, col_idx|
-        if square.class == King && square.color == color
-          return [row_idx, col_idx]
-        end
-      end
-    end
-  end
-
-  def find_all_moves(color)
-    all_moves = []
-    @grid.each_with_index do |row, row_idx|
-      row.each_with_index do |square, col_idx|
-        # debugger if square is_a?(Pawn)
-        if square.class != EmptyPiece && square.color == color
-            all_moves += square.list_moves
-        end
-      end
-    end
-    all_moves.uniq
-  end
-
-
-  def checkmate?(color)
-    if in_check?(color)
-      if find_all_moves.each do |move|
-        !valid_moves.include?(move)
-      # will be addressed later
-      end
-    end
-    end
-  end
-
-  def dup
-    dupped = Board.new
-    dupped.grid.each_with_index do |row, idx1|
-      row.each_with_index do |square, idx2|
-        unless square.class == EmptyPiece
-          color = self[idx1, idx2].color
-          type = self[idx1, idx2].class
-          square = type.new(color, [idx1, idx2], dupped)
-        end
-      end
-    end
-    dupped
-  end
 end
