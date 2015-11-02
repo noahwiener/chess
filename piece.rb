@@ -28,6 +28,7 @@ class Piece
   end
 
   def valid_moves(color)
+    return [] if self.color != color
     valid_moves = []
 
     self.possible_moves.each do |move|

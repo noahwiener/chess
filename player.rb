@@ -21,7 +21,8 @@ class Player
         to_pos = display.get_input
         display.selected = nil
       else
-        puts "It is #{self.name}'s turn. #{self.name}, select a piece to move"
+        puts "It is #{self.name}'s turn."
+        puts "#{self.name}, select a piece to move"
         from_pos = display.get_input
         display.selected = from_pos
       end
