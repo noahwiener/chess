@@ -43,9 +43,12 @@ class Game
   private
 
   def take_turn
-    player_input = @current.make_move
-    board.make_move(@current.color, player_input[0], player_input[1])
-    display.render
+    until board.move_made
+      player_input = @current.make_move
+      board.make_move(@current.color, player_input[0], player_input[1])
+      display.render
+    end
+    board.move_made = false
     switch_players!
     if board.in_check?(@current)
       puts "@current.name is in check"

@@ -5,18 +5,20 @@ require 'byebug'
 class Board
   include Cursorable
 
-  attr_accessor :grid, :display
+  attr_accessor :grid, :display, :move_made
 
   def initialize(duped = false)
     @empty_piece = EmptyPiece.new
     @grid = Array.new(8) { Array.new(8, @empty_piece) }
     add_starting_pieces unless duped
+    @move_made = false
   end
 
   def make_move(color, from, to)
     if self[from].valid_moves(color).include?(to)
       if valid_move?(from, to)
         make_move!(from, to, color)
+        @move_made = true
       end
     end
     promote_pawns
@@ -56,7 +58,6 @@ class Board
     end
     all_moves.uniq
   end
-
 
   def checkmate?(color)
     if in_check?(color)

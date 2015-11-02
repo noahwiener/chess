@@ -11,18 +11,18 @@ module Slideable
                  downleft: [-1, 1] }
 
   def possible_moves
-    possible_moves = []
+    possibilities = []
 
     available_directions.each do |dir|
       current_pos = @position
       new_pos = [@position[0] + DIRECTIONS[dir][0], @position[1] + DIRECTIONS[dir][1]]
 
       while @board.valid_move?(current_pos, new_pos)
-        possible_moves << new_pos
-        current_pos = new_pos
-        new_pos = [current_pos[0] + DIRECTIONS[dir][0], current_pos[1] + DIRECTIONS[dir][1]]
+        possibilities << new_pos
+        test_pos = new_pos
+        new_pos = [test_pos[0] + DIRECTIONS[dir][0], test_pos[1] + DIRECTIONS[dir][1]]
       end
     end
-    possible_moves
+    possibilities
   end
 end
