@@ -6,4 +6,4 @@ To play the game, clone this repo, navigate to the project folder, and enter <co
 
 ## Demo
 
-<img src="https://gyazo.com/a0539fbb1ef3ac225fb39356686715c3" height="400" alt="gameplay-gif">
+<img src="https://i.gyazo.com/a0539fbb1ef3ac225fb39356686715c3.gif" height="400" alt="gameplay-gif">
