@@ -14,7 +14,7 @@ To play the game, clone this repo, navigate to the project folder, and enter <co
 
 In order to check whether moves would put a player in check, I made a deep duplication of the board, performed the move, and checked the result.
 
-<code>
+`
   def dup
     duped = Board.new(true)
     grid.each_with_index do |row, row_idx|
@@ -28,9 +28,9 @@ In order to check whether moves would put a player in check, I made a deep dupli
     end
     duped
   end
-</code>
+`
 
-<code>  
+`
   def valid_moves(color)
     return [] if self.color != color
     valid_moves = []
@@ -42,7 +42,7 @@ In order to check whether moves would put a player in check, I made a deep dupli
       end
     valid_moves
   end
-  </code>
+`
 
 
 ### Slideable Piece inheritance
@@ -53,7 +53,7 @@ Object-Oriented Programming--all pieces inherit from a Piece class, and the Bish
 
 Navigate through the game with simple arrow key commands.
 
-<code>
+`
   def get_input
     key = KEYMAP[read_char]
     handle_key(key)
@@ -89,4 +89,4 @@ Navigate through the game with simple arrow key commands.
     return input
   end
 
-</code>
+`
