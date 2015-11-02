@@ -19,7 +19,6 @@ class Player
       if from_pos
         puts "#{self.name}, select a place to move that piece."
         to_pos = display.get_input
-        display.selected = nil
       else
         puts "It is #{self.name}'s turn."
         puts "#{self.name}, select a piece to move"
@@ -27,7 +26,7 @@ class Player
         display.selected = from_pos
       end
     end
-
+    display.selected = nil
     [from_pos, to_pos]
   end
 end

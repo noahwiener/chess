@@ -18,9 +18,15 @@ include Cursorable
     @board.grid.each_with_index do |row, row_idx|
       row.each_with_index do |square, col_idx|
         if @selected == [row_idx, col_idx]
-          print square.to_s.colorize(background: :yellow)
+          print square.to_s.colorize(background: :light_cyan)
         elsif @cursor_pos == [row_idx, col_idx]
-          print square.to_s.colorize(background: :green)
+          print square.to_s.colorize(background: :light_green)
+        elsif @selected && board[@selected].class != EmptyPiece && board[@selected].possible_moves.include?([row_idx, col_idx])
+          if square.class != EmptyPiece
+            print square.to_s.colorize(background: :cyan)
+          else
+            print square.to_s.colorize(background: :yellow)
+          end
         elsif (row_idx + col_idx).even?
             print square.to_s.colorize(background: :blue)
         elsif (row_idx + col_idx).odd?
@@ -30,11 +36,6 @@ include Cursorable
       print "\n"
     end
     nil
-  end
-
-  def select_squares
-    @selected = move_cursor
-    move_cursor
   end
 
   def move_cursor
