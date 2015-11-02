@@ -17,14 +17,14 @@ class Board
   def make_move(color, from, to)
     if self[from].valid_moves(color).include?(to)
       if valid_move?(from, to)
-        make_move!(from, to, color)
+        make_move!(from, to)
         @move_made = true
       end
     end
     promote_pawns
   end
 
-  def make_move!(from, to, color)
+  def make_move!(from, to)
     self[to] = self[from]
     self[to].position = to
     self[from] = EmptyPiece.new
@@ -59,32 +59,24 @@ class Board
     all_moves.uniq
   end
 
+  def pieces
+    rows = @grid.flatten
+    squares = rows.flatten
+    squares.reject { |piece| piece.class == EmptyPiece }
+  end
+
   def checkmate?(color)
     if in_check?(color)
-      opponent = opposite_color(color)
-      @grid.each do |row|
-        row.each do |square|
-          if square.class != EmptyPiece && square.color == opponent
-              return false if square.valid_moves(opponent).count > 0
-          end
-        end
-      end
-      return true
+      current_pieces = pieces.select { |piece| piece.color == color }
+      return current_pieces.all? { |piece| piece.valid_moves(color).empty? }
     end
     false
   end
 
   def stalemate?(color)
     unless in_check?(color)
-      opponent = opposite_color(color)
-      @grid.each do |row|
-        row.each do |square|
-          if square.class != EmptyPiece && square.color == opponent
-              return false if square.valid_moves(opponent).count > 0
-          end
-        end
-      end
-      return true
+      current_pieces = pieces.select { |piece| piece.color == color }
+      return current_pieces.all? { |piece| piece.valid_moves(color).empty? }
     end
     false
   end

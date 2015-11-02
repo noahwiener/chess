@@ -17,11 +17,11 @@ class Player
       display.render
 
       if from_pos
-        puts "#{self.name}'s turn. Move to where?"
+        puts "#{self.name}, select a place to move that piece."
         to_pos = display.get_input
         display.selected = nil
       else
-        puts "#{self.name}'s turn. Move from where?"
+        puts "It is #{self.name}'s turn. #{self.name}, select a piece to move"
         from_pos = display.get_input
         display.selected = from_pos
       end

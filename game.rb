@@ -29,14 +29,16 @@ class Game
     puts "#{@players[0].name} is white and goes first"
     puts "#{@players[1].name} is black"
     puts "Have fun!"
-    sleep 0
+    sleep 2
 
     display.render
     take_turn until game_over?
     if checkmate?
-      puts "Checkmate! #{@current.name} wins!"
+      puts "Checkmate! #{@players.last.name} wins!"
+      sleep 5
     else
       puts "It's a draw!"
+      sleep 5
     end
   end
 
@@ -50,8 +52,9 @@ class Game
     end
     board.move_made = false
     switch_players!
-    if board.in_check?(@current)
-      puts "@current.name is in check"
+    if board.in_check?(@current.color)
+      puts "#{@players.last.name} put #{@current.name} in check"
+      sleep 1
     end
   end
 

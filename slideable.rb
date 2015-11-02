@@ -19,6 +19,7 @@ module Slideable
 
       while @board.valid_move?(current_pos, new_pos)
         possibilities << new_pos
+        break if @board[new_pos].class != EmptyPiece && @board[new_pos].color != color
         test_pos = new_pos
         new_pos = [test_pos[0] + DIRECTIONS[dir][0], test_pos[1] + DIRECTIONS[dir][1]]
       end

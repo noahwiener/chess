@@ -23,13 +23,8 @@ class Piece
     color != piece.color
   end
 
-  def dup_with_board(board)
-    self.class.new(@color, @position, board)
-  end
-
-
-  def dup(board)
-    self.class.new(color, position.dup, board)
+  def dup_with_board(new_board)
+    self.class.new(color, position.dup, new_board)
   end
 
   def valid_moves(color)
@@ -37,7 +32,7 @@ class Piece
 
     self.possible_moves.each do |move|
       new_board = board.dup
-      new_board.make_move!(position, move, color)
+      new_board.make_move!(position, move)
       valid_moves << move unless new_board.in_check?(color)
     end
     valid_moves
