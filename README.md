@@ -28,17 +28,20 @@ In order to check whether moves would put a player in check, I made a deep dupli
     duped
   end`
 
-`def valid_moves(color)
+`   
+
+  def valid_moves(color)
     return [] if self.color != color
     valid_moves = []
-
       self.possible_moves.each do |move|
         new_board = board.dup
         new_board.make_move!(position, move)
         valid_moves << move unless new_board.in_check?(color)
       end
     valid_moves
-  end`
+  end
+
+`
 
 
 ### Slideable Piece inheritance
