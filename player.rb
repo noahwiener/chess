@@ -19,13 +19,11 @@ class Player
       if from_pos
         puts "#{self.name}'s turn. Move to where?"
         to_pos = display.get_input
-
-        display.reset! if to_pos
+        display.selected = nil
       else
         puts "#{self.name}'s turn. Move from where?"
         from_pos = display.get_input
-
-        display.reset! if from_pos
+        display.selected = from_pos
       end
     end
 

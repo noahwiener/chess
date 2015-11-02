@@ -48,14 +48,14 @@ class Pawn < Piece
 
       possibles.each do |dir|
         pos = [DIRECTIONS[dir][0] + @position[0], DIRECTIONS[dir][1] + @position[1]]
-        @available_directions << DIRECTIONS[dir] if @board.valid_move?(@position, pos) && @board[pos].color == :white
+        @available_directions << DIRECTIONS[dir] if @board[pos].class != EmptyPiece && @board.valid_move?(@position, pos) && @board[pos].color == :w
       end
     elsif color == :w
       possibles = [:upright, :upleft]
 
       possibles.each do |dir|
         pos = [DIRECTIONS[dir][0] + @position[0], DIRECTIONS[dir][1] + @position[1]]
-        @available_directions << DIRECTIONS[dir] if @board.valid_move?(@position, pos) && @board[pos].color == :black
+        @available_directions << DIRECTIONS[dir] if @board[pos].class != EmptyPiece && @board.valid_move?(@position, pos) && @board[pos].color == :b
       end
     end
   end

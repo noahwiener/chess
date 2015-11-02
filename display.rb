@@ -1,14 +1,15 @@
 require_relative 'cursorable'
-require_relative 'board'
 
 class Display
 include Cursorable
   attr_reader :board
+  attr_accessor :selected
 
   def initialize(board)
     @board = board
     @cursor_pos = [0,0]
     @selected = nil
+    @queue = []
     render
   end
 
@@ -44,6 +45,16 @@ include Cursorable
     @cursor_pos
   end
 
+
+  def render_on_input
+    render
+    until @queue.length == 2
+      until get_input == "\r"
+        render
+      end
+    end
+    @board.make_move(@queue.shift, @queue.shift)
+  end
 
 
 end

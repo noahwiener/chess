@@ -13,15 +13,13 @@ class Board
     add_starting_pieces unless duped
   end
 
-  def make_move(color)
-    from, to = @display.take_input(color)
-
+  def make_move(color, from, to)
     if self[from].valid_moves(color).include?(to)
       if valid_move?(from, to)
         make_move!(from, to, color)
       end
     end
-    # promote_pawn
+    promote_pawns
   end
 
   def make_move!(from, to, color)
@@ -116,11 +114,16 @@ class Board
   end
 
   def valid_move?(from, to)
-   if in_bounds?(to) && self[from].opponent?(self[to])
+  return false if self[from].class == EmptyPiece
+   if in_bounds?(to) && (self[to].class == EmptyPiece || self[from].opponent?(self[to]))
      true
    else
      false
    end
+  end
+
+  def in_bounds?(pos)
+    pos.first.between?(0,7) && pos.last.between?(0,7)
   end
 
 private
@@ -165,12 +168,20 @@ private
    row_array
  end
 
-  def in_bounds?(pos)
-    pos.first.between?(0,7) && pos.last.between?(0,7)
-  end
 
   def opponent_piece?(piece, square)
     self[*square].class != EmptyPiece && self[*square].color != piece.color
+  end
+
+  def promote_pawns
+    promotion = []
+    white = self.grid[0].select { |piece| piece.is_a?(Pawn) && piece.color == :w }
+    black = self.grid[7].select { |piece| piece.is_a?(Pawn) && piece.color == :b }
+
+    promotion = white + black
+    promotion.each do |piece|
+      self.grid[piece.pos[0]][piece.pos[1]] = Queen.new(piece.color, piece.pos, self)
+    end
   end
 
 end

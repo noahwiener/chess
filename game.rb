@@ -29,7 +29,7 @@ class Game
     puts "#{@players[0].name} is white and goes first"
     puts "#{@players[1].name} is black"
     puts "Have fun!"
-    sleep 1
+    sleep 0
 
     display.render
     take_turn until game_over?
@@ -44,9 +44,12 @@ class Game
 
   def take_turn
     player_input = @current.make_move
-    board.make_move(player_input)
+    board.make_move(@current.color, player_input[0], player_input[1])
     display.render
     switch_players!
+    if board.in_check?(@current)
+      puts "@current.name is in check"
+    end
   end
 
   def switch_players!
