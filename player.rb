@@ -1,13 +1,15 @@
 require_relative 'display'
+require 'byebug'
 
 class Player
   attr_reader :color, :display
-  attr_accessor :name
+  attr_accessor :name, :message
 
   def initialize(color, display)
     @color = color
     @display = display
     @name = ""
+    @message = ""
   end
 
   def make_move
@@ -15,11 +17,13 @@ class Player
 
     until from_pos && to_pos
       display.render
-
       if from_pos
         puts "#{self.name}, select a place to move that piece."
         to_pos = display.get_input
       else
+        if message != ""
+          puts message
+        end
         puts "It is #{self.name}'s turn."
         puts "#{self.name}, select a piece to move"
         from_pos = display.get_input

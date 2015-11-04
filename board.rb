@@ -14,12 +14,22 @@ class Board
     @move_made = false
   end
 
-  def make_move(color, from, to)
-    if self[from].valid_moves(color).include?(to)
+  def make_move(player, from, to)
+    if self[from].class == EmptyPiece
+      player.message = "You cannot move an empty square"
+      return
+    elsif self[from].color != player.color
+      player.message = "You cannot move an opponent's piece"
+      return
+    end
+
+    if self[from].valid_moves(player.color).include?(to)
       if valid_move?(from, to)
         make_move!(from, to)
         @move_made = true
       end
+    else
+      player.message = "You can't move that piece to that square, please try again"
     end
     promote_pawns
   end
