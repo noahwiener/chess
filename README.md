@@ -15,6 +15,20 @@ To play the game, clone this repo, navigate to the project folder, and enter <co
 In order to check whether moves would put a player in check, I made a deep duplication of the board, performed the move, and checked the result.
 
 ```
+  def valid_moves(color)
+    return [] if self.color != color
+    valid_moves = []
+
+      self.possible_moves.each do |move|
+        new_board = board.dup
+        new_board.make_move!(position, move)
+        valid_moves << move unless new_board.in_check?(color)
+      end
+    valid_moves
+  end
+```
+
+```
   def dup
     duped = Board.new(true)
     grid.each_with_index do |row, row_idx|
@@ -30,22 +44,7 @@ In order to check whether moves would put a player in check, I made a deep dupli
   end
 ```
 
-```
-  def valid_moves(color)
-    return [] if self.color != color
-    valid_moves = []
-
-      self.possible_moves.each do |move|
-        new_board = board.dup
-        new_board.make_move!(position, move)
-        valid_moves << move unless new_board.in_check?(color)
-      end
-    valid_moves
-  end
-```
-
-
-### Slideable Piece inheritance
+### Slideable Piece Inheritance
 
 Object-Oriented Programming--all pieces inherit from a Piece class, and the Bishop, Rook, and Queen all inherit from the Slideable module for their multi-tile movement.
 
